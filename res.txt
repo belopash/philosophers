@@ -1,0 +1,96 @@
+1611666890145 [31m1[0m is thinking
+1611666890145 [32m2[0m is thinking
+1611666890145 [31m1[0m has taken a fork (1/2)
+1611666890145 [31m1[0m has taken a fork (2/2)
+1611666890145 [31m1[0m is eating (1)
+1611666890145 [33m3[0m is thinking
+1611666890145 [34m4[0m is thinking
+1611666890145 [33m3[0m has taken a fork (1/2)
+1611666890145 [33m3[0m has taken a fork (2/2)
+1611666890145 [33m3[0m is eating (1)
+1611666890145 [35m5[0m is thinking
+1611666890145 [34m4[0m has taken a fork (1/2)
+1611666890145 [36m6[0m is thinking
+1611666890145 [35m5[0m has taken a fork (1/2)
+1611666890145 [37m7[0m is thinking
+1611666890145 [36m6[0m has taken a fork (1/2)
+1611666890146 [38m8[0m is thinking
+1611666890146 [37m7[0m has taken a fork (1/2)
+1611666890146 [39m9[0m is thinking
+1611666890146 [38m8[0m has taken a fork (1/2)
+1611666890146 [30m10[0m is thinking
+1611666890146 [39m9[0m has taken a fork (1/2)
+1611666890146 [31m11[0m is thinking
+1611666890146 [30m10[0m has taken a fork (1/2)
+1611666890146 [32m12[0m is thinking
+1611666890146 [31m11[0m has taken a fork (1/2)
+1611666890146 [33m13[0m is thinking
+1611666890146 [32m12[0m has taken a fork (1/2)
+1611666890146 [34m14[0m is thinking
+1611666890146 [33m13[0m has taken a fork (1/2)
+1611666890146 [35m15[0m is thinking
+1611666890146 [34m14[0m has taken a fork (1/2)
+1611666890146 [36m16[0m is thinking
+1611666890146 [35m15[0m has taken a fork (1/2)
+1611666890146 [37m17[0m is thinking
+1611666890146 [36m16[0m has taken a fork (1/2)
+1611666890146 [38m18[0m is thinking
+1611666890146 [37m17[0m has taken a fork (1/2)
+1611666890146 [39m19[0m is thinking
+1611666890146 [38m18[0m has taken a fork (1/2)
+1611666890146 [30m20[0m is thinking
+1611666890146 [39m19[0m has taken a fork (1/2)
+1611666890146 [31m21[0m is thinking
+1611666890146 [30m20[0m has taken a fork (1/2)
+1611666890146 [32m22[0m is thinking
+1611666890146 [31m21[0m has taken a fork (1/2)
+1611666890146 [33m23[0m is thinking
+1611666890146 [32m22[0m has taken a fork (1/2)
+1611666890146 [34m24[0m is thinking
+1611666890146 [35m25[0m is thinking
+1611666890146 [34m24[0m has taken a fork (1/2)
+1611666890146 [34m24[0m has taken a fork (2/2)
+1611666890146 [34m24[0m is eating (1)
+1611666890146 [36m26[0m is thinking
+1611666890146 [37m27[0m is thinking
+1611666890146 [36m26[0m has taken a fork (1/2)
+1611666890146 [36m26[0m has taken a fork (2/2)
+1611666890146 [36m26[0m is eating (1)
+1611666890146 [38m28[0m is thinking
+1611666890146 [37m27[0m has taken a fork (1/2)
+1611666890146 [39m29[0m is thinking
+1611666890146 [38m28[0m has taken a fork (1/2)
+1611666890146 [30m30[0m is thinking
+1611666890146 [39m29[0m has taken a fork (1/2)
+1611666890146 [31m31[0m is thinking
+1611666890146 [32m32[0m is thinking
+1611666890146 [33m33[0m is thinking
+1611666890146 [34m34[0m is thinking
+1611666890146 [33m33[0m has taken a fork (1/2)
+1611666890146 [33m33[0m has taken a fork (2/2)
+1611666890146 [33m33[0m is eating (1)
+1611666890146 [35m35[0m is thinking
+1611666890146 [34m34[0m has taken a fork (1/2)
+1611666890146 [36m36[0m is thinking
+1611666890146 [35m35[0m has taken a fork (1/2)
+1611666890146 [37m37[0m is thinking
+1611666890146 [36m36[0m has taken a fork (1/2)
+1611666890146 [38m38[0m is thinking
+1611666890146 [37m37[0m has taken a fork (1/2)
+1611666890146 [39m39[0m is thinking
+1611666890146 [38m38[0m has taken a fork (1/2)
+1611666890146 [30m40[0m is thinking
+1611666890146 [39m39[0m has taken a fork (1/2)
+1611666890146 [31m41[0m is thinking
+1611666890146 [30m40[0m has taken a fork (1/2)
+1611666890146 [32m42[0m is thinking
+1611666890146 [31m41[0m has taken a fork (1/2)
+1611666890146 [33m43[0m is thinking
+1611666890146 [32m42[0m has taken a fork (1/2)
+1611666890146 [34m44[0m is thinking
+1611666890146 [33m43[0m has taken a fork (1/2)
+1611666890146 [35m45[0m is thinking
+1611666890147 [36m46[0m is thinking
+1611666890147 [34m4[0m has taken a fork (2/2)
+1611666890147 [34m4[0m is eating (1)
+1611666890147 [34m4 die
