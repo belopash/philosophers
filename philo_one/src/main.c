@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 13:42:33 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/27 23:18:56 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/03/28 19:46:27 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@
 #include "../inc/utils.h"
 #include "stdlib.h"
 #include <pthread.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <string.h>
+
+void kill_philo(int id)
+{
+    pthread_mutex_lock(&g_input);
+    printf("%llums \x1B[3%dm%d\033[0m died\n", millis(), id % 10 + 1, id + 1);
+}
 
 int parse_params(int argc, char **argv)
 {
@@ -32,8 +42,59 @@ int parse_params(int argc, char **argv)
         g_params.num_of_eat = ft_atoi(argv[noe]);
     else
         g_params.num_of_eat = -1;
-    pthread_mutex_init(&(g_params.input), NULL);
     return (0);
+}
+
+int check_philo(int id)
+{
+    t_ms time;
+
+    if (g_philos[id].finished)
+        return (0);
+    pthread_mutex_lock(&g_life_check);
+    time = millis();
+    if (g_philos[id].num_of_eats == g_params.num_of_eat)
+    {
+        pthread_detach(g_philos[id].pthread);
+        g_philos[id].finished = 1;
+        g_finished_philos++;
+    }
+    else if (time >= g_philos[id].last_eat_time + g_params.time_to_die)
+    {
+        kill_philo(id);
+        return (1);
+    }
+    pthread_mutex_unlock(&g_life_check);
+    return (0);
+}
+
+int monitor()
+{
+    int i;
+
+    while (g_finished_philos < g_params.count)
+    {
+        i = 0;
+        while (i < g_params.count)
+        {
+            if (check_philo(i))
+                return (0);
+            if (i + 1 < g_params.count)
+                if (check_philo(i + 1))
+                    return (0);
+            if (i + 2 < g_params.count)
+                if (check_philo(i + 2))
+                    return (0);
+            if (i + 3 < g_params.count)
+                if (check_philo(i + 3))
+                    return (0);
+            if (i + 4 < g_params.count)
+                if (check_philo(i + 4))
+                    return (0);
+            i += 5;
+        }
+        usleep(500);
+    }
 }
 
 int main(int argc, char **argv)
@@ -49,55 +110,27 @@ int main(int argc, char **argv)
     i = 0;
     unsigned long long prev_time;
     prev_time = millis();
+    pthread_mutex_init(&g_input, NULL);
+    pthread_mutex_init(&g_take, NULL);
+    pthread_mutex_init(&g_life_check, NULL);
     while (i < g_params.count)
     {
-        pthread_mutex_init(&(g_forks[i]), NULL);
+        pthread_mutex_init(&(g_forks[i].mutex), NULL);
         i++;
     }
     i = 0;
     while (i < g_params.count)
     {
         philo_init(&(g_philos[i]), i);
-        i++;
+        i += 2;
     }
-    i = 0;
+    i = 1;
+        usleep(500);
+
     while (i < g_params.count)
     {
-        i++;
+        philo_init(&(g_philos[i]), i);
+        i += 2;
     }
-    unsigned long long delta;
-
-    delta = millis() - prev_time;
-    int a = g_params.count / 2 + (g_params.count % 2) ? 1 : 0;
-    while (1)
-    {
-        i = 0;
-        while (i < a)
-        {
-            pthread_mutex_lock(&(g_philos[i].life_timer_mutex));
-            if (g_philos[i].life_timer >= g_params.time_to_die)
-            {
-                printf("%llu\n", g_philos[i].life_timer);
-                philo_destroy(&(g_philos[i]));
-                return (0);
-            }
-            g_philos[i].life_timer += delta;
-            pthread_mutex_unlock(&(g_philos[i].life_timer_mutex));
-            if (i != g_params.count - i - 1)
-            {
-                pthread_mutex_lock(&(g_philos[g_params.count - i - 1].life_timer_mutex));
-                if (g_philos[g_params.count - i - 1].life_timer >= g_params.time_to_die)
-                {
-                    philo_destroy(&(g_philos[g_params.count - i - 1]));
-                    return (0);
-                }
-                g_philos[g_params.count - i - 1].life_timer += delta;
-                pthread_mutex_unlock(&(g_philos[g_params.count - i - 1].life_timer_mutex));
-            }
-            i++;
-        }
-        delta = millis() - prev_time;
-        prev_time = millis();
-        usleep(1000);
-    }
+    return monitor();
 }
