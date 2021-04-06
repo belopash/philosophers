@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 13:42:33 by bbrock            #+#    #+#             */
-/*   Updated: 2021/03/28 18:04:52 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 15:16:15 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,31 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <fcntl.h>
-#include <sys/stat.h>  
+#include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
 
-void kill_philo(int id){
+void ft_log(int id, int action, t_ms time)
+{
     sem_wait(g_input);
-    printf("%llums \x1B[3%dm%d\033[0m died\n", millis(), id % 10 + 1, id + 1);
+    if (action == a_eat)
+        printf("%llums \x1B[3%dm%d\033[0m is eating\n", time, id % 10 + 1, id + 1);
+    else if (action == a_think)
+        printf("%llums \x1B[3%dm%d\033[0m is thinking\n", time, id % 10 + 1, id + 1);
+    else if (action == a_sleep)
+        printf("%llums \x1B[3%dm%d\033[0m is sleeping\n", time, id % 10 + 1, id + 1);
+    else if (action == a_take)
+        printf("%llums \x1B[3%dm%d\033[0m has taken a fork\n", time, id % 10 + 1, id + 1);
+    else if (action == a_die)
+    {
+        printf("%llums \x1B[3%dm%d\033[0m died\n", time, id % 10 + 1, id + 1);
+        return;
+    }
+    sem_post(g_input);
+}
+void kill_philo(int id)
+{
+    ft_log(id, a_die, millis());
 }
 
 int parse_params(int argc, char **argv)
@@ -51,26 +69,26 @@ int check_philo(int id)
 
     if (g_philos[id].finished)
         return (0);
+    sem_wait(g_philos[id].life_check);
     time = millis();
-    sem_wait(g_life_check);
     if (g_philos[id].num_of_eats == g_params.num_of_eat)
     {
-        pthread_detach(g_philos[id].pthread);
         g_philos[id].finished = 1;
-        g_finished_philos++;  
+        g_finished_philos++;
     }
     else if (time >= g_philos[id].last_eat_time + g_params.time_to_die)
     {
         kill_philo(id);
         return (1);
     }
-    sem_post(g_life_check);
+    sem_post(g_philos[id].life_check);
     return (0);
 }
 
-int monitor(){
+int monitor()
+{
     int i;
-    
+
     while (g_finished_philos < g_params.count)
     {
         i = 0;
@@ -92,7 +110,7 @@ int monitor(){
                     return (0);
             i += 5;
         }
-        usleep(500);
+        // usleep(500);
     }
 }
 
@@ -109,16 +127,17 @@ int main(int argc, char **argv)
     i = 0;
     sem_unlink("forks");
     sem_unlink("input");
-    sem_unlink("life_check");
     sem_unlink("take");
     g_finished_philos = 0;
     g_forks = sem_open("forks", O_CREAT, 0777, g_params.count);
     g_input = sem_open("input", O_CREAT, 0777, 1);
-    g_life_check = sem_open("life_check", O_CREAT, 0777, 1);
+    // g_life_check = sem_open("life_check", O_CREAT, 0777, 1);
     g_take = sem_open("take", O_CREAT, 0777, 1);
     while (i < g_params.count)
     {
         philo_init(&(g_philos[i]), i);
+        pthread_detach(g_philos[i].pthread);
+        // usleep(1000);
         i++;
     }
     return monitor();
