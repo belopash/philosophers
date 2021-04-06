@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 11:45:28 by bbrock            #+#    #+#             */
-/*   Updated: 2021/04/06 20:23:59 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 20:36:08 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,13 @@ static void *start(void *philo_t)
 		// pthread_mutex_lock(&(g_take));
 		// take(philo, philo->l_fork);
 		// take(philo, philo->r_fork);
-		pthread_mutex_lock(&(g_take));
+		// pthread_mutex_lock(&(g_take));
 		pthread_t pths[2];
 		pthread_create(&(pths[0]), NULL, take_left, philo_t);
 		pthread_create(&(pths[1]), NULL, take_right, philo_t);
 		pthread_join((pths[0]), 0);
 		pthread_join((pths[1]), 0);
-		pthread_mutex_unlock(&g_take);
+		// pthread_mutex_unlock(&g_take);
 		// }
 		// pthread_mutex_lock(&(philo->life_check));
 		// if (philo->id % 2 == 0)

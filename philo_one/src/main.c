@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 13:42:33 by bbrock            #+#    #+#             */
-/*   Updated: 2021/04/06 20:26:27 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 20:33:46 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,15 +139,15 @@ int main(int argc, char **argv)
     while (i < g_params.count)
     {
         philo_init(&(g_philos[i]), i);
-        i += 2;
+        i += 1;
     }
-    i = 1;
-    usleep(1000);
+    // i = 1;
+    // usleep(1000);
 
-    while (i < g_params.count)
-    {
-        philo_init(&(g_philos[i]), i);
-        i += 2;
-    }
+    // while (i < g_params.count)
+    // {
+    //     philo_init(&(g_philos[i]), i);
+    //     i += 2;
+    // }
     return monitor();
 }
