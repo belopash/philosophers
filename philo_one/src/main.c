@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 13:42:33 by bbrock            #+#    #+#             */
-/*   Updated: 2021/03/28 19:46:27 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 20:26:27 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
-
-void kill_philo(int id)
-{
-    pthread_mutex_lock(&g_input);
-    printf("%llums \x1B[3%dm%d\033[0m died\n", millis(), id % 10 + 1, id + 1);
-}
 
 int parse_params(int argc, char **argv)
 {
@@ -45,26 +39,49 @@ int parse_params(int argc, char **argv)
     return (0);
 }
 
+void ft_log(int id, int action, t_ms time)
+{
+    pthread_mutex_lock(&g_input);
+    if (action == a_eat)
+        printf("%lums \x1B[3%dm%d\033[0m is eating\n", time, id % 10 + 1, id + 1);
+    else if (action == a_think)
+        printf("%lums \x1B[3%dm%d\033[0m is thinking\n", time, id % 10 + 1, id + 1);
+    else if (action == a_sleep)
+        printf("%lums \x1B[3%dm%d\033[0m is sleeping\n", time, id % 10 + 1, id + 1);
+    else if (action == a_take)
+        printf("%lums \x1B[3%dm%d\033[0m has taken a fork\n", time, id % 10 + 1, id + 1);
+    else if (action == a_die)
+    {
+        printf("%lums \x1B[3%dm%d\033[0m died\n", time, id % 10 + 1, id + 1);
+        return;
+    }
+    pthread_mutex_unlock(&g_input);
+}
+
+void kill_philo(int id)
+{
+    ft_log(id, a_die, millis());
+}
+
 int check_philo(int id)
 {
     t_ms time;
 
     if (g_philos[id].finished)
         return (0);
-    pthread_mutex_lock(&g_life_check);
+    pthread_mutex_lock(&(g_philos[id].life_check));
     time = millis();
     if (g_philos[id].num_of_eats == g_params.num_of_eat)
     {
-        pthread_detach(g_philos[id].pthread);
         g_philos[id].finished = 1;
         g_finished_philos++;
     }
-    else if (time >= g_philos[id].last_eat_time + g_params.time_to_die)
+    else if (time >= g_philos[id].last_eat_time + g_params.time_to_die && g_philos[id].finished < 2)
     {
         kill_philo(id);
         return (1);
     }
-    pthread_mutex_unlock(&g_life_check);
+    pthread_mutex_unlock(&(g_philos[id].life_check));
     return (0);
 }
 
@@ -93,7 +110,7 @@ int monitor()
                     return (0);
             i += 5;
         }
-        usleep(500);
+        usleep(1000);
     }
 }
 
@@ -112,10 +129,10 @@ int main(int argc, char **argv)
     prev_time = millis();
     pthread_mutex_init(&g_input, NULL);
     pthread_mutex_init(&g_take, NULL);
-    pthread_mutex_init(&g_life_check, NULL);
     while (i < g_params.count)
     {
         pthread_mutex_init(&(g_forks[i].mutex), NULL);
+        g_forks[i].is_free = 1;
         i++;
     }
     i = 0;
@@ -125,7 +142,7 @@ int main(int argc, char **argv)
         i += 2;
     }
     i = 1;
-        usleep(500);
+    usleep(1000);
 
     while (i < g_params.count)
     {

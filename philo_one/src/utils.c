@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 14:33:18 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/29 10:14:23 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 17:56:00 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/time.h>
 #include <stdio.h>
+#include "../inc/philo.h"
+#include <unistd.h>
 
 static int	ft_isdigit(int c)
 {
@@ -71,4 +73,19 @@ unsigned long long millis()
     }
     gettimeofday(&current_time, 0);
     return (((current_time.tv_sec) * 1000000 + (current_time.tv_usec)) - start)/1000;
+}
+
+void ft_usleep(t_ms time)
+{
+	t_ms end;
+	t_ms delta;
+
+	end = millis() + time;
+	while (1)
+	{
+		delta = (end - millis());
+		if (delta <= 0)
+			break;
+		usleep(100);
+	}
 }

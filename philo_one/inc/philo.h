@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 11:40:02 by bbrock            #+#    #+#             */
-/*   Updated: 2021/03/28 18:24:31 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 19:35:15 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,15 @@ enum ARGS
     noe = 5
 };
 
+enum ACTIONS
+{
+    a_eat,
+    a_think,
+    a_sleep,
+    a_die,
+    a_take
+};
+
 typedef struct s_philo_params
 {
     int count;
@@ -39,7 +48,7 @@ typedef struct s_philo_params
 
 t_philo_params g_params;
 
-typedef unsigned long long t_ms;
+typedef unsigned long t_ms;
 
 typedef struct s_fork t_fork;
 
@@ -52,6 +61,7 @@ typedef struct s_philo
     int finished;
     t_fork *l_fork;
     t_fork *r_fork;
+    pthread_mutex_t life_check;
     int forks_count;
 } t_philo;
 t_philo g_philos[PHILO_MAX];
@@ -59,16 +69,17 @@ t_philo g_philos[PHILO_MAX];
 typedef struct s_fork
 {
     t_philo *owner;
+    int is_free;
     pthread_mutex_t mutex;
 } t_fork;
 t_fork g_forks[PHILO_MAX];
 
 pthread_mutex_t g_input;
 pthread_mutex_t g_take;
-pthread_mutex_t g_life_check;
 
 int g_finished_philos;
 
 int philo_init(t_philo *philo, int id);
+void ft_log(int id, int action, t_ms time);
 
 #endif
