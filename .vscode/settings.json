@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "memory_resource": "c"
+        "memory_resource": "c",
+        "philo.h": "c"
     }
 }

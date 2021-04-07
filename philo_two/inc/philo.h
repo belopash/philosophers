@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 11:40:02 by bbrock            #+#    #+#             */
-/*   Updated: 2021/04/06 14:53:32 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 16:45:03 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_philo_params
 
 t_philo_params g_params;
 
-typedef unsigned long long t_ms;
+typedef unsigned long t_ms;
 
 typedef struct s_philo
 {

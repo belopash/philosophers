@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 14:33:18 by bbrock            #+#    #+#             */
-/*   Updated: 2021/03/28 12:17:49 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 17:24:40 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "../inc/philo.h"
 
 static int ft_isdigit(int c)
 {
@@ -59,31 +60,31 @@ int ft_isnumber(char *str)
 	return (i && 1);
 }
 
-unsigned long long millis()
+unsigned millis()
 {
 	struct timeval current_time;
-	static unsigned long long start = 0;
+	static t_ms start = 0;
 
 	if (start == 0)
 	{
 		gettimeofday(&current_time, 0);
-		start = ((current_time.tv_sec) * 1000000 + (current_time.tv_usec));
+		start = ((current_time.tv_sec) * 1000 + (current_time.tv_usec) / 1000);
 	}
 	gettimeofday(&current_time, 0);
-	return (((current_time.tv_sec) * 1000000 + (current_time.tv_usec)) - start) / 1000;
+	return (((current_time.tv_sec) * 1000 + (current_time.tv_usec) / 1000) - start);
 }
 
-void ft_usleep(unsigned long long time)
+void ft_usleep(t_ms time)
 {
-	unsigned long long end;
-	long long delta;
+	t_ms end;
+	t_ms delta;
 
 	end = millis() + time;
 	while (1)
 	{
-		delta = (end - millis()) * 1000;
+		delta = (end - millis());
 		if (delta <= 0)
 			break;
-		usleep(((delta < 10) ? delta : 10));
+		usleep(100);
 	}
 }

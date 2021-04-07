@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 11:40:02 by bbrock            #+#    #+#             */
-/*   Updated: 2021/04/06 19:35:15 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/07 18:40:34 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_philo g_philos[PHILO_MAX];
 typedef struct s_fork
 {
     t_philo *owner;
-    int is_free;
+    int is_dirty;
     pthread_mutex_t mutex;
 } t_fork;
 t_fork g_forks[PHILO_MAX];

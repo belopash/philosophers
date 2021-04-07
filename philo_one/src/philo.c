@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 11:45:28 by bbrock            #+#    #+#             */
-/*   Updated: 2021/04/06 20:36:08 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/07 19:08:03 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,44 +20,101 @@
 static void *take_left(void *philo_t)
 {
 	t_philo *philo = (t_philo *)philo_t;
+	int waiting;
 
-	// int ret;
-
-	pthread_mutex_lock(&(philo->l_fork->mutex));
-
-	// if (fork->is_free && fork->owner != philo)
+	// waiting = 1;
+	// while (waiting)
 	// {
-	// 	fork->owner = philo;
+	// pthread_mutex_lock(&(philo->l_fork->mutex));
+	// if (philo->l_fork->owner == philo)
+	// 	waiting = 0;
+	// pthread_mutex_unlock(&(philo->l_fork->mutex));
+	// if (!waiting)
+	// 	break;
+	pthread_mutex_lock(&(philo->l_fork->mutex));
 	ft_log(philo->id, a_take, millis());
-	// philo->forks_count += 1;
-	// 	fork->is_free = 0;
+	pthread_mutex_lock(&(philo->r_fork->mutex));
+	ft_log(philo->id, a_take, millis());
+	// if (philo->l_fork->owner == NULL && philo->l_fork->reserved == NULL)
+	// {
+	// 	philo->l_fork->reserved = philo;
+	// }
+	// if (philo->r_fork->owner == NULL && philo->r_fork->reserved == NULL)
+	// {
+	// 	philo->r_fork->reserved = philo;
+	// }
+	// if (!philo->l_fork->owner && (!philo->l_fork->reserved || philo->l_fork->reserved == philo) && philo->r_fork->owner == NULL)
+	// {
+	// 	philo->r_fork->reserved = NULL;
+	// 	philo->r_fork->owner = philo;
+	// 	philo->l_fork->reserved = NULL;
+	// 	philo->l_fork->owner = philo;
+	// 	waiting = 0;
+	// }
+	// if (!philo->r_fork->owner && (!philo->r_fork->reserved || philo->r_fork->reserved == philo) && philo->l_fork->owner == NULL)
+	// {
+	// 	philo->r_fork->reserved = NULL;
+	// 	philo->r_fork->owner = philo;
+	// 	philo->l_fork->reserved = NULL;
+	// 	philo->l_fork->owner = philo;
+	// 	waiting = 0;
+	// }
+	// if (!(philo->l_fork->owner || philo->r_fork->owner))
+	// {
+	// 	philo->r_fork->reserved = NULL;
+	// 	philo->r_fork->owner = philo;
+	// 	philo->l_fork->reserved = NULL;
+	// 	philo->l_fork->owner = philo;
+	// 	waiting = 0;
+	// }
+	// pthread_mutex_unlock(&(philo->l_fork->mutex));
+	// pthread_mutex_unlock(&(philo->r_fork->mutex));
 	// }
 }
 
 static void *take_right(void *philo_t)
 {
 	t_philo *philo = (t_philo *)philo_t;
+	int waiting;
 
-	pthread_mutex_lock(&(philo->r_fork->mutex));
-
-	// if (fork->is_free && fork->owner != philo)
-	// {
-	// 	fork->owner = philo;
+	waiting = 1;
+	while (waiting)
+	{
+		pthread_mutex_lock(&(philo->r_fork->mutex));
+		if (philo->r_fork->owner == philo)
+		{
+			waiting = 0;
+		}
+		pthread_mutex_unlock(&(philo->r_fork->mutex));
+		if (!waiting)
+			break;
+		pthread_mutex_lock(&(philo->l_fork->mutex));
+		if (philo->l_fork->owner == philo || philo->l_fork->owner == NULL)
+		{
+			pthread_mutex_lock(&(philo->r_fork->mutex));
+			if (philo->r_fork->owner == NULL)
+			{
+				philo->r_fork->owner = philo;
+				philo->l_fork->owner = philo;
+			}
+			waiting = 0;
+			pthread_mutex_unlock(&(philo->r_fork->mutex));
+		}
+		pthread_mutex_unlock(&(philo->l_fork->mutex));
+	}
 	ft_log(philo->id, a_take, millis());
-	// 	philo->forks_count += 1;
-	// 	fork->is_free = 0;
-	// }
 }
 
 static void drop_forks(t_philo *philo)
 {
 	// pthread_mutex_lock(&(philo->l_fork->mutex));
 	// if (philo->l_fork->owner == philo)
-	// 	philo->l_fork->is_free = 1;
+	// 	philo->l_fork->owner = NULL;
+	// philo->l_fork->is_dirty = 1;
 	pthread_mutex_unlock(&(philo->l_fork->mutex));
 	// pthread_mutex_lock(&(philo->r_fork->mutex));
 	// if (philo->r_fork->owner == philo)
-	// 	philo->r_fork->is_free = 1;
+	// 	philo->r_fork->owner = NULL;
 	pthread_mutex_unlock(&(philo->r_fork->mutex));
 	pthread_mutex_lock(&(philo->life_check));
 	philo->forks_count = 0;
@@ -112,11 +169,12 @@ static void *start(void *philo_t)
 		// take(philo, philo->l_fork);
 		// take(philo, philo->r_fork);
 		// pthread_mutex_lock(&(g_take));
-		pthread_t pths[2];
-		pthread_create(&(pths[0]), NULL, take_left, philo_t);
-		pthread_create(&(pths[1]), NULL, take_right, philo_t);
-		pthread_join((pths[0]), 0);
-		pthread_join((pths[1]), 0);
+		take_left(philo_t);
+		// pthread_t pths[2];
+		// pthread_create(&(pths[0]), NULL, take_left, philo_t);
+		// // pthread_create(&(pths[1]), NULL, take_right, philo_t);
+		// pthread_join((pths[0]), 0);
+		// pthread_join((pths[1]), 0);
 		// pthread_mutex_unlock(&g_take);
 		// }
 		// pthread_mutex_lock(&(philo->life_check));
@@ -178,16 +236,8 @@ int philo_init(t_philo *philo, int id)
 	}
 	else
 	{
-		// if (g_params.count % 2)
-		// {
 			philo->r_fork = &(g_forks[philo->id]);
 			philo->l_fork = &(g_forks[0]);
-		// }
-		// else
-		// {
-		// 	philo->l_fork = &(g_forks[philo->id]);
-		// 	philo->r_fork = &(g_forks[0]);
-		// }
 	}
 	pthread_mutex_init(&(philo->life_check), NULL);
 	return pthread_create(&(philo->pthread), NULL, start, philo);

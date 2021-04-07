@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 11:45:28 by bbrock            #+#    #+#             */
-/*   Updated: 2021/04/06 15:06:40 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/06 17:33:17 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-void ft_wait(t_philo *philo, unsigned long long time)
-{
-    // unsigned long long end;
-    // long long delta;
-
-    // end = millis() + time;
-    // while (1)
-    // {
-    //     delta = (end - millis()) * 1000;
-    //     if (delta <= 0)
-    //         break;
-    //     usleep(((delta < 10) ? delta : 10));
-    // }
-    usleep(time * 1000);
-}
-
-
-
 static void drop_forks(t_philo *philo)
 {
     sem_post(g_forks);
@@ -43,15 +25,17 @@ static void drop_forks(t_philo *philo)
 
 static void ft_sleep(t_philo *philo)
 {
-    ft_log(philo->id, a_sleep, millis());
+    t_ms time;
 
-    ft_wait(philo, g_params.time_to_sleep);
+    time = millis();
+    ft_log(philo->id, a_sleep, time);
+
+    ft_usleep(g_params.time_to_sleep);
 }
 
 static void eat(t_philo *philo)
 {
     t_ms time;
-
 
     sem_wait(philo->life_check);
     time = millis();
@@ -60,13 +44,12 @@ static void eat(t_philo *philo)
 
     ft_log(philo->id, a_eat, time);
 
-    ft_wait(philo, g_params.time_to_eat);
+    ft_usleep(g_params.time_to_eat);
 
     drop_forks(philo);
     sem_wait(philo->life_check);
     philo->num_of_eats++;
     sem_post(philo->life_check);
-    ft_sleep(philo);
 }
 
 static void take(t_philo *philo)
@@ -80,13 +63,11 @@ static void take(t_philo *philo)
     ft_log(philo->id, a_take, millis());
 
     sem_post(g_take);
-        eat(philo);
 }
 
 static void think(t_philo *philo)
 {
     ft_log(philo->id, a_think, millis());
-    take(philo);
 }
 
 static void *start(void *philo_t)
@@ -96,6 +77,9 @@ static void *start(void *philo_t)
     while (1)
     {
         think(philo);
+        take(philo);
+        eat(philo);
+        ft_sleep(philo);
     }
 }
 

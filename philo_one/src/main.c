@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 13:42:33 by bbrock            #+#    #+#             */
-/*   Updated: 2021/04/06 20:33:46 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/04/07 19:17:01 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     while (i < g_params.count)
     {
         pthread_mutex_init(&(g_forks[i].mutex), NULL);
-        g_forks[i].is_free = 1;
+        // g_forks[i].is_free = 1;
         i++;
     }
     i = 0;
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
         i += 1;
     }
     // i = 1;
-    // usleep(1000);
+    // usleep(5000);
 
     // while (i < g_params.count)
     // {
